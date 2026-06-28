@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Logo } from "./Logo";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun, Menu, X } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+
 
 const links = [
   { label: "Platform", href: "#platform" },
@@ -14,6 +17,7 @@ export const Nav = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [dark, setDark] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -46,9 +50,11 @@ export const Nav = () => {
             >
               {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <Button variant="ghost" size="sm" className="hidden md:inline-flex">Sign in</Button>
-            <Button size="sm" className="bg-gradient-gold text-primary-foreground hover:opacity-90 hover:shadow-gold transition-all rounded-full px-5 text-foreground" style={{ color: 'hsl(var(--primary))' }}>
-              Book a Consult
+            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
+              <Link to={user ? "/dashboard" : "/auth"}>{user ? "Dashboard" : "Sign in"}</Link>
+            </Button>
+            <Button asChild size="sm" className="bg-gradient-gold hover:opacity-90 hover:shadow-gold transition-all rounded-full px-5" style={{ color: 'hsl(var(--primary))' }}>
+              <Link to="/auth">Book a Consult</Link>
             </Button>
             <button onClick={() => setOpen(!open)} className="md:hidden h-9 w-9 inline-flex items-center justify-center rounded-full hover:bg-muted" aria-label="Menu">
               {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
